@@ -2,3 +2,5 @@ main: com.bases.fr.Main
 name: PluginParkour
 version: 1.0.0
 author: luckygun
+commands:
+    startparkour:
