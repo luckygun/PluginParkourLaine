@@ -1,39 +1,34 @@
 package com.bases.fr;
 
-import java.io.File;
-import java.util.Set;
-
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.defaults.GameModeCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.evenement.fr.*;
+
 public class Main extends JavaPlugin{	//classe principale
 	
-	private EventClass ec; 				// On crée l'objet EventClass
+	private BreakBlock bb; 				// On crée l'objet qui gere l'évènement lorsque l'on casse un block
+	private EvenementLaine event;		// On crée l'objet qui gere l'évènement lorsque l'on a un block en main
+	
 	
 	public void onEnable(){				// Fonction au démarrage du plugin
+		bb = new BreakBlock(this);		// Initialise l'objet BreakBlock
+		event = new EvenementLaine(this);	// Initialise l'objet EvenementLaine
 		
-		ec = new EventClass(this);		// Initialise l'objet EventClass
-		
-		File f = new File("plugins\\PluginParkour\\config.yml");
-		
-		getConfig().options().copyDefaults(true);		// Créé le fichier de config 
+		getConfig().options().copyDefaults(false);		// Créé le fichier de config 
 		this.saveConfig();
-		
-		
-		System.out.println("Plugin ON");
+		System.out.println("Plugin ON");				//affiche un message dans la console du serveur
 	}
 	
 	
-	public void onDisable(){			// Fonction à l'arret du serveur
-		System.out.println("Plugin OFF");
+	public void onDisable(){							// Fonction à l'arret du serveur
+		System.out.println("Plugin OFF");				//affiche un message dans la console du serveur
 	}	
 	
 	
@@ -44,24 +39,19 @@ public class Main extends JavaPlugin{	//classe principale
 			p.sendMessage("/startparkour fonctionne !");		// Message de test
 			//p.setGameMode(GameMode.ADVENTURE);				// Change le gamemode
 			
-			p.getInventory().setItem(0, new ItemStack(Material.STONE));
+			p.getInventory().setItem(0, new ItemStack(Material.STONE));		//Remplis l'inventaire
 			p.getInventory().setItem(1, new ItemStack(Material.CLAY));
 			p.getInventory().setItem(2, new ItemStack(Material.WOOL));
 			p.updateInventory();								//update l'inventaire
-			PluginManager pm = Bukkit.getServer().getPluginManager();		// "Active" la classe Event
-			pm.registerEvents(ec, this);
+			
+			PluginManager pm0 = Bukkit.getServer().getPluginManager();		// "Active" l'objet qui gere l'évènement lorsque l'on a un block en main
+			pm0.registerEvents(event, this);
+			
+			PluginManager pm1 = Bukkit.getServer().getPluginManager();		// "Active" l'objet qui gere l'évènement lorsque l'on casse un block
+			pm1.registerEvents(bb, this);
 		}
-		
 		
 		
 		return true;
 	}
-	
-	
-	
-	//getItemInHand()
-	
-
-	
-	
 }
