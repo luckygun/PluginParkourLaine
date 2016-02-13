@@ -4,3 +4,5 @@ version: 1.0.0
 author: luckygun
 commands:
     startparkour:
+        aliases: start
+        description: Demarre le plugin de parkour  
